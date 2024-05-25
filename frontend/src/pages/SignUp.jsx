@@ -3,26 +3,40 @@ import loginIcon from "../assest/signin.gif";
 import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import imageTobase64 from "../helper/imageTobase64";
 const SignUp = () => {
 
-    const [showpassword,setShowPassword] = useState(false);
+    const [showpassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [data, setData] = useState({
-        email : "",
-        password : "",
-        name : "",
-        confirmPassword : "",
-        profilePic : ""
+        email: "",
+        password: "",
+        name: "",
+        confirmPassword: "",
+        profilePic: ""
     })
 
-    const handleOnChange = (e)=> {
-        const {name, value} = e.target
+    const handleOnChange = (e) => {
+        const { name, value } = e.target
 
-        setData((prev)=> {
+        setData((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
+    }
+
+    const handlePicSubmit= async(e) => {
+        const file = e.target.files[0];
+
+        const imagePic = await imageTobase64(file);
+        console.log("imagePic", imagePic);
+        setData((prev) => {
             return{
                 ...prev,
-                [name] : value
-            }
+                profile : imagePic
+        }
         })
     }
 
@@ -31,57 +45,69 @@ const SignUp = () => {
     }
 
     return (
-        <section id="login">
+        <section id="signup">
             <div className="mx-auto container p-4">
+
                 <div className="bg-white p-2 w-full max-w-sm  mx-auto rounded">
-                    <div className="w-20 h-20 mx-auto">
-                        <img src={loginIcon} alt="loginicons" />
+
+                    <div className="w-20 h-20 mx-auto relative  rounded-full overflow-hidden">
+                        <div>
+                            <img src={data.profilePic || loginIcon} alt="loginicons" />
+                        </div>
+                        <form id="pic">
+                            <label>
+                            <div className="text-xs bg-slate-200 bg-opacity-90 cursor-pointer pb-4 pt-2 text-center py-4 absolute bottom-0 w-full">
+                                Upload Photo
+                            </div>
+                            <input type="file" className="hidden" onChange={handlePicSubmit}/>
+                            </label>
+                        </form>
                     </div>
 
                     <form className="pt-10 flex flex-col gap-3" onSubmit={handleSubmit}>
-                    <div className="grid">
+                        <div className="grid">
                             <label htmlFor="email">Username :</label>
                             <div className="bg-slate-200 p-2">
-                                <input type="text" 
-                                placeholder="enter your usename" 
-                                onChange={handleOnChange}
-                                name="name"
-                                value={data.name}
-                                className="w-full h-full outline-none bg-transparent" />
+                                <input type="text"
+                                    placeholder="enter your usename"
+                                    onChange={handleOnChange}
+                                    name="name"
+                                    value={data.name}
+                                    className="w-full h-full outline-none bg-transparent" />
                             </div>
                         </div>
                         <div className="grid">
                             <label htmlFor="email">Email :</label>
                             <div className="bg-slate-200 p-2">
-                                <input type="email" 
-                                placeholder="enter your email" 
-                                onChange={handleOnChange}
-                                name="email"
-                                value={data.email}
-                                className="w-full h-full outline-none bg-transparent" />
+                                <input type="email"
+                                    placeholder="enter your email"
+                                    onChange={handleOnChange}
+                                    name="email"
+                                    value={data.email}
+                                    className="w-full h-full outline-none bg-transparent" />
                             </div>
                         </div>
                         <div>
                             <label htmlFor="password">Password :</label>
                             <div className="bg-slate-200 p-2 flex">
-                                <input type={showpassword ? "text" : "password" } 
-                                placeholder="enter your password" 
-                                onChange={handleOnChange}
-                                name="password"
-                                value={data.password}
-                                className="w-full h-full outline-none bg-transparent" />
-                                <div className="cursor-pointer" onClick={()=> {setShowPassword((prev)=>!prev)}}>
+                                <input type={showpassword ? "text" : "password"}
+                                    placeholder="enter your password"
+                                    onChange={handleOnChange}
+                                    name="password"
+                                    value={data.password}
+                                    className="w-full h-full outline-none bg-transparent" />
+                                <div className="cursor-pointer" onClick={() => { setShowPassword((prev) => !prev) }}>
                                     <span>
                                         {
                                             showpassword ? (
-                                                <FaEyeSlash/>
+                                                <FaEyeSlash />
                                             )
-                                            :
-                                            (
-                                                <FaEye/>
-                                            )
+                                                :
+                                                (
+                                                    <FaEye />
+                                                )
                                         }
-                                       
+
                                     </span>
                                 </div>
                             </div>
@@ -89,24 +115,24 @@ const SignUp = () => {
                         <div>
                             <label htmlFor="password">Password :</label>
                             <div className="bg-slate-200 p-2 flex">
-                                <input type={showConfirmPassword ? "text" : "password" } 
-                                placeholder="enter your password" 
-                                onChange={handleOnChange}
-                                name="confirmPassword"
-                                value={data.confirmPassword}
-                                className="w-full h-full outline-none bg-transparent" />
-                                <div className="cursor-pointer" onClick={()=> {setShowConfirmPassword((prev)=>!prev)}}>
+                                <input type={showConfirmPassword ? "text" : "password"}
+                                    placeholder="enter your password"
+                                    onChange={handleOnChange}
+                                    name="confirmPassword"
+                                    value={data.confirmPassword}
+                                    className="w-full h-full outline-none bg-transparent" />
+                                <div className="cursor-pointer" onClick={() => { setShowConfirmPassword((prev) => !prev) }}>
                                     <span>
                                         {
                                             showConfirmPassword ? (
-                                                <FaEyeSlash/>
+                                                <FaEyeSlash />
                                             )
-                                            :
-                                            (
-                                                <FaEye/>
-                                            )
+                                                :
+                                                (
+                                                    <FaEye />
+                                                )
                                         }
-                                       
+
                                     </span>
                                 </div>
                             </div>
